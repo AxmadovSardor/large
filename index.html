@@ -18,16 +18,15 @@
 </head>
 <body>
   <h1>Sign in with Google</h1>
-
-  <div id="g_id_onload"
-       data-client_id="176143086214-m5fa19lg9cvv92hukqucgmljho6et9mm.apps.googleusercontent.com"
-       data-callback="handleCredentialResponse">
-  </div>
+  <form name="form">
+    <div id="g_id_onload" data-client_id="176143086214-m5fa19lg9cvv92hukqucgmljho6et9mm.apps.googleusercontent.com" data-callback="handleCredentialResponse"></div>
+    <div><button onclick="submit()">Submit</button></div>
+  </form>
   <div class="g_id_signin" data-type="standard"></div>
 
   <div id="content"></div>
 
-  <script>
+  <!-- <script>
     function handleCredentialResponse(response) {
       const data = jwt_decode(response.credential);
       const email = data.email;
@@ -42,7 +41,7 @@
     function saveToSheet(email) {
       console.log("Sending email:", email);
 
-      fetch("https://script.google.com/macros/s/AKfycbx3pEjswXNkjiyqUVwgWTCc1WPuuuYi-IgIguzkb29AxzDT2Dai7c1Jlg97OzZE8n8qBw/exec", {
+      fetch(``, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -59,6 +58,7 @@
       });
     }
 
-  </script>
+  </script> -->
+  <script src="app.js"></script>
 </body>
 </html>
