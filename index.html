@@ -1,33 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Google Sign-In</title>
+  <title>Google Sign-In + Save to Sheet</title>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script>
-    function handleCredentialResponse(response) {
-      const data = jwt_decode(response.credential);
-      const email = data.email;
-      saveToSheet(email); // Step 2
-      document.getElementById("content").innerHTML = `
-        <h2>Welcome, ${data.name}</h2>
-        <p>Email: ${data.email}</p>
-        <img src="${data.picture}" alt="Profile Picture"/>`;
+  <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 50px;
     }
-    function saveToSheet(email) {
-  fetch("https://script.google.com/macros/s/AKfycbwyqV4-QoViK1cOt3DovG7Yf8peSgcb4R64T_VQrCtVWpfqcFudAAkpyQuinSw6WBluKA/exec", {
-    method: "POST",
-    body: JSON.stringify({ email }),
-    headers: {
-      "Content-Type": "application/json"
+    img {
+      border-radius: 50%;
+      margin-top: 10px;
     }
-    })
-    .then(res => console.log("Saved to Sheet"))
-    .catch(err => console.error("Error:", err));
-  } // Closing the function properly
-</script>
-<script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+  </style>
 </head>
 <body>
+  <h1>Sign in with Google</h1>
+
   <div id="g_id_onload"
        data-client_id="176143086214-m5fa19lg9cvv92hukqucgmljho6et9mm.apps.googleusercontent.com"
        data-callback="handleCredentialResponse">
@@ -35,5 +26,31 @@
   <div class="g_id_signin" data-type="standard"></div>
 
   <div id="content"></div>
+
+  <script>
+    function handleCredentialResponse(response) {
+      const data = jwt_decode(response.credential);
+      const email = data.email;
+      document.getElementById("content").innerHTML = `
+        <h2>Welcome, ${data.name}</h2>
+        <p>Email: ${email}</p>
+        <img src="${data.picture}" width="100" height="100"/>
+      `;
+      saveToSheet(email);
+    }
+
+    function saveToSheet(email) {
+      fetch("https://script.google.com/macros/s/AKfycbwyqV4-QoViK1cOt3DovG7Yf8peSgcb4R64T_VQrCtVWpfqcFudAAkpyQuinSw6WBluKA/exec", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email })
+      })
+      .then(res => res.text())
+      .then(data => console.log("Saved to Sheet:", data))
+      .catch(err => console.error("Error:", err));
+    }
+  </script>
 </body>
 </html>
