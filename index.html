@@ -40,6 +40,8 @@
     }
 
     function saveToSheet(email) {
+      console.log("Sending email:", email);
+
       fetch("https://script.google.com/macros/s/AKfycbx3pEjswXNkjiyqUVwgWTCc1WPuuuYi-IgIguzkb29AxzDT2Dai7c1Jlg97OzZE8n8qBw/exec", {
         method: "POST",
         headers: {
@@ -47,10 +49,16 @@
         },
         body: JSON.stringify({ email })
       })
-      .then(res => res.text())
-      .then(data => console.log("Saved to Sheet:", data))
-      .catch(err => console.error("Error:", err));
+      .then(async res => {
+        const text = await res.text();
+        console.log("Response status:", res.status);
+        console.log("Response text:", text);
+      })
+      .catch(err => {
+        console.error("Fetch failed:", err);
+      });
     }
+
   </script>
 </body>
 </html>
