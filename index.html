@@ -6,17 +6,30 @@
   <script>
     function handleCredentialResponse(response) {
       const data = jwt_decode(response.credential);
+      const email = data.email;
+      saveToSheet(email); // Step 2
       document.getElementById("content").innerHTML = `
         <h2>Welcome, ${data.name}</h2>
         <p>Email: ${data.email}</p>
         <img src="${data.picture}" alt="Profile Picture"/>`;
     }
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+    function saveToSheet(email) {
+  fetch("https://script.google.com/macros/s/AKfycbwyqV4-QoViK1cOt3DovG7Yf8peSgcb4R64T_VQrCtVWpfqcFudAAkpyQuinSw6WBluKA/exec", {
+    method: "POST",
+    body: JSON.stringify({ email }),
+    headers: {
+      "Content-Type": "application/json"
+    }
+    })
+    .then(res => console.log("Saved to Sheet"))
+    .catch(err => console.error("Error:", err));
+  } // Closing the function properly
+</script>
+<script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
 </head>
 <body>
   <div id="g_id_onload"
-       data-client_id="YOUR_GOOGLE_CLIENT_ID"
+       data-client_id="176143086214-m5fa19lg9cvv92hukqucgmljho6et9mm.apps.googleusercontent.com"
        data-callback="handleCredentialResponse">
   </div>
   <div class="g_id_signin" data-type="standard"></div>
