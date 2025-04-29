@@ -9,7 +9,7 @@ form.addEventListener('submit', handleSubmit)
 
 function handleSubmit(e){
     e.preventDefault()
-  
+
     fetch(scriptURL, { method: 'POST', body: new FormData(form)})
     .then(response => alert("Thank you! Form is submitted" ))
     .then(() => { if (email == "") {
