@@ -3,25 +3,27 @@ const scriptURL = 'https://script.google.com/macros/s/AKfycbx3pEjswXNkjiyqUVwgWT
 const form = document.forms['form']
 function handleCredentialResponse(response) {
     const data = jwt_decode(response.credential);
+    console.log(data)
     const email = data.email;
+    localStorage.setItem("log", email);
     document.getElementById("content").innerHTML = `
       <h2>Welcome, ${data.name}</h2>
       <p>Email: ${email}</p>
       <img src="${data.picture}" width="100" height="100"/>
     `;
-    handleSubmit(email);
+    handleSubmit();
   }
 
-function handleSubmit(email){
-    if (email) e.preventDefault();
+function handleSubmit(e){
+    e.preventDefault();
 
     fetch(scriptURL, { method: 'POST', body: new FormData(form)})
     .then(response => alert("Thank you! Form is submitted" ))
     .then(() => { if (email == "") {
-        window.location.reload(); 
-    } else{
-        window.location.href = "https://solo-leveling-off.netlify.app/registration.html";
-    }
-})
+            window.location.reload(); 
+        } else{
+            window.location.href = "https://solo-leveling-off.netlify.app/registration.html";
+        }
+    })
     .catch(error => console.error('Error!', error.message))
 }
